@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment | WishCraft</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</head>
+
+<body>
+    <header class="payment-header">
+
+    <a href="create.html" class="back-btn">
+        <i class="ri-arrow-left-line"></i>
+        Back
+    </a>
+
+    <h1>Complete Your Payment</h1>
+
+</header>
+
+<section class="payment-section">
+
+    <div class="payment-container">
+
+        <!-- Left Side -->
+
+        <div class="order-summary">
+
+            <h2>Order Summary</h2>
+
+            <div class="summary-item">
+                <span>Template</span>
+                <strong>Royal Birthday</strong>
+            </div>
+
+            <div class="summary-item">
+                <span>Plan</span>
+                <strong>Premium</strong>
+            </div>
+
+            <div class="summary-item total">
+                <span>Total</span>
+                <strong>₹299</strong>
+            </div>
+
+        </div>
+
+        <!-- Right Side -->
+
+        <div class="payment-card">
+
+            <h2>Choose Payment Method</h2>
+
+            <button class="primary-btn">
+                Pay with UPI
+            </button>
+
+            <button class="secondary-btn">
+                Pay with Card
+            </button>
+            <div class="qr-box">
+
+    <img src="assets/image/qr.png" alt="UPI QR">
+
+    <p>Scan QR using any UPI App</p>
+    <div class="qr-box">
+
+    <img src="assets/image/payment-qr.jpeg" alt="Paytm QR">
+
+</div>
+
+</div>
+
+<div class="upi-box">
+
+    <span>UPI ID</span>
+
+    <strong>9389305783@ptaxis</strong>
+
+</div>
+<div class="upi-box">
+
+    <span>Receiver Name</span>
+    <strong>Neeraj</strong>
+
+    <br><br>
+
+    <span>UPI ID</span>
+    <strong>9389305783@ptaxis</strong>
+
+    <br><br>
+
+    <span>Amount</span>
+    <strong>₹19</strong>
+
+</div>
+
+<div class="payment-note">
+
+    <i class="ri-information-line"></i>
+
+    <p>
+        After completing the payment, click the button below to continue.
+    </p>
+
+</div>
+<div class="confirm-payment">
+
+    <input type="checkbox" id="paymentCheck">
+
+    <label for="paymentCheck">
+        I have successfully completed the ₹19 payment.
+    </label>
+
+</div>
+<button class="primary-btn"  id="paymentDoneBtn">
+    Payment Completed
+</button>
+
+        </div>
+
+    </div>
+
+</section>
+<script src="javascript/payment.js"></script>
+
+</body>
+</html>

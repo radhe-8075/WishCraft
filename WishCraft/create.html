@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Wish | WishCraft</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- YAHAN SE START -->
+
+    <header class="create-header">
+
+        <a href="index.html" class="back-btn">
+            <i class="ri-arrow-left-line"></i>
+            Back
+        </a>
+
+        <h1>Create Your Birthday Wish</h1>
+
+    </header>
+
+    <section class="create-section">
+
+        <form class="wish-form" id="wish-form">
+
+            <div class="form-group">
+
+                <label>Birthday Person Name</label>
+
+                <input type="text" id="birthdayName" placeholder="Enter Name" required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Your Name</label>
+
+                <input type="text" placeholder="Your Name" required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Birthday Date</label>
+
+                <input type="date" required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Custom Message</label>
+
+                <textarea id="birthdayMessage" rows="5" placeholder="Write your birthday message" required></textarea>
+
+            </div>
+
+<div class="form-group">
+
+    <label>Upload Photo</label>
+
+    <div class="upload-box" id="dropArea">
+
+        <i class="ri-image-add-line"></i>
+
+        <p>Click to Upload Photo</p>
+
+             <input type="file" id="photoInput" accept="image/*" multiple>
+             <div id="photoGallery"></div>
+        
+
+    </div>
+
+</div>
+
+            <div class="form-group">
+
+    <label>Upload Music</label>
+
+    <div class="upload-box">
+
+        <i class="ri-music-2-line"></i>
+
+        <p>Click to Upload Music</p>
+
+        <input type="file">
+
+    </div>
+
+</div>
+
+           <div class="form-group">
+
+    <label>Select Theme</label>
+
+    <div class="theme-grid">
+
+        <div class="theme-card active" data-theme="pink">
+            <img src="assets/image/template1.jpg" alt="">
+            <h4>Classic</h4>
+        </div>
+
+        <div class="theme-card" data-theme="royal">
+            <img src="assets/image/template2.jpg" alt="">
+            <h4>Royal</h4>
+        </div>
+
+        <div class="theme-card" data-theme="Kids">
+            <img src="assets/image/template3.jpg" alt="">
+            <h4>Kids</h4>
+        </div>
+
+    </div>
+
+</div>
+
+            <button  type="submit" class="primary-btn">
+
+                   🎉 Generate Birthday Website
+
+            </button>
+
+        </form>
+
+    </section>
+
+    <!-- YAHAN TAK -->
+
+    <script src="javascript/script.js"></script>
+
+</body>
+
+</html>
