@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Website Title -->
+    <title>Give Feedback | WishCraft</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="create-header">
+
+        <a href="index.html" class="back-btn">
+            <i class="ri-arrow-left-line"></i>
+            Back
+        </a>
+
+        <h1>Share Your Feedback</h1>
+
+    </header>
+
+    <section class="create-section">
+
+        <form class="wish-form" id="feedback-form">
+
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="feedbackName" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Your Rating</label>
+
+                <div class="star-rating" id="starRating">
+                    <i class="ri-star-line" data-value="1"></i>
+                    <i class="ri-star-line" data-value="2"></i>
+                    <i class="ri-star-line" data-value="3"></i>
+                    <i class="ri-star-line" data-value="4"></i>
+                    <i class="ri-star-line" data-value="5"></i>
+                </div>
+
+                <input type="hidden" id="feedbackRating" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Your Feedback</label>
+                <textarea id="feedbackMessage" rows="5" placeholder="Tell us what you think about WishCraft..." required></textarea>
+            </div>
+
+            <button type="submit" class="primary-btn" id="feedbackSubmitBtn">
+                💌 Submit Feedback
+            </button>
+
+            <p id="feedbackStatus" class="feedback-status"></p>
+
+        </form>
+
+    </section>
+
+    <!-- EmailJS (for email notifications) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // Replace with your EmailJS Public Key after creating a free account
+        if(typeof emailjs !== "undefined"){
+            emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+        }
+    </script>
+
+    <!-- Firebase + Feedback Logic -->
+    <script type="module" src="javascript/feedback.js"></script>
+
+</body>
+</html>

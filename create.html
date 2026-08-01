@@ -50,7 +50,7 @@
 
                 <label>Your Name</label>
 
-                <input type="text" id="senderName" placeholder="Your Name" required>
+                <input type="text" placeholder="Your Name" required>
 
             </div>
 
@@ -58,7 +58,7 @@
 
                 <label>Birthday Date</label>
 
-                <input type="date" id="birthdayDate" required>
+                <input type="date" required>
 
             </div>
 
@@ -90,15 +90,15 @@
 
             <div class="form-group">
 
-    <label>Upload Music</label>
+    <label>Upload Music (Max 1 minute)</label>
 
-    <div class="upload-box">
+    <div class="upload-box" id="musicDropArea">
 
         <i class="ri-music-2-line"></i>
 
-        <p>Click to Upload Music</p>
+        <p id="musicUploadText">Click to Upload Music</p>
 
-        <input type="file">
+        <input type="file" id="musicInput" accept="audio/*">
 
     </div>
 
@@ -120,7 +120,7 @@
             <h4>Royal</h4>
         </div>
 
-        <div class="theme-card" data-theme="kids">
+        <div class="theme-card" data-theme="Kids">
             <img src="assets/image/template3.jpg" alt="">
             <h4>Kids</h4>
         </div>

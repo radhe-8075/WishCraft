@@ -185,39 +185,56 @@ if(photoInput){
     });
 
 }
-const themeCards = document.querySelectorAll(".theme-card");
+const musicInput = document.getElementById("musicInput");
+const musicUploadText = document.getElementById("musicUploadText");
 
-function setSelectedTheme(theme) {
+if(musicInput && musicUploadText){
 
-    const selectedCard = Array.from(themeCards).find(card => card.dataset.theme === theme);
+    musicInput.addEventListener("change", function(){
 
-    if (!selectedCard) {
-        return false;
-    }
+        if(this.files && this.files[0]){
 
-    themeCards.forEach(card => {
-        card.classList.toggle("active", card === selectedCard);
+            const file = this.files[0];
+            const tempAudio = new Audio(URL.createObjectURL(file));
+
+            tempAudio.addEventListener("loadedmetadata", function(){
+
+                if(tempAudio.duration > 60){
+
+                    alert("⚠️ Music file 1 minute (60 seconds) se lambi nahi honi chahiye. Kripya chhota clip upload karein.");
+
+                    musicInput.value = "";
+                    musicUploadText.textContent = "Click to Upload Music";
+
+                } else {
+
+                    musicUploadText.textContent = "🎵 " + file.name + " (" + Math.round(tempAudio.duration) + "s)";
+
+                }
+
+            });
+
+        } else {
+
+            musicUploadText.textContent = "Click to Upload Music";
+
+        }
+
     });
 
-    localStorage.setItem("selectedTheme", theme);
-    return true;
-
 }
-
-if (themeCards.length > 0) {
-
-    const storedTheme = localStorage.getItem("selectedTheme");
-    const activeTheme = document.querySelector(".theme-card.active");
-
-    setSelectedTheme(storedTheme) || setSelectedTheme(activeTheme?.dataset.theme);
-
-}
+const themeCards = document.querySelectorAll(".theme-card");
 
 themeCards.forEach(card => {
 
     card.addEventListener("click", () => {
 
-        setSelectedTheme(card.dataset.theme);
+        themeCards.forEach(item => {
+            item.classList.remove("active");
+        });
+
+        card.classList.add("active");
+localStorage.setItem("selectedTheme", card.dataset.theme);
     });
 
 });
@@ -281,22 +298,12 @@ Array.from(photoInput.files).forEach(file => {
 
     const removeBtn = document.createElement("button");
 
-    removeBtn.type = "button";
     removeBtn.classList.add("remove-image");
 
     removeBtn.innerHTML = "×";
 
     removeBtn.addEventListener("click", () => {
 
-        const remainingFiles = new DataTransfer();
-
-        Array.from(photoInput.files).forEach(selectedFile => {
-            if (selectedFile !== file) {
-                remainingFiles.items.add(selectedFile);
-            }
-        });
-
-        photoInput.files = remainingFiles.files;
         box.remove();
 
     });
@@ -316,72 +323,90 @@ const wishForm = document.getElementById("wish-form");
 
 if (wishForm) {
 
-    wishForm.addEventListener("submit", async (e) => {
+    wishForm.addEventListener("submit", (e) => {
+        console.log("Form Submitted");
 
         e.preventDefault();
 
-        const name = document.getElementById("birthdayName").value.trim();
-        const senderName = document.getElementById("senderName").value.trim();
-        const birthdayDate = document.getElementById("birthdayDate").value;
-        const message = document.getElementById("birthdayMessage").value.trim();
-        const activeThemeCard = document.querySelector(".theme-card.active");
-        const theme = activeThemeCard?.dataset.theme || localStorage.getItem("selectedTheme") || "pink";
-        const files = Array.from(photoInput?.files || []);
-        const submitButton = wishForm.querySelector('button[type="submit"]');
-        const originalLabel = submitButton?.innerHTML;
+        const name = document.getElementById("birthdayName").value;
 
-        // Keep a local draft for previews, but publish the shareable version to Firebase.
-        localStorage.setItem("birthdayName", name);
+        const message = document.getElementById("birthdayMessage").value;
+         localStorage.setItem("birthdayName", name);
+
         localStorage.setItem("birthdayMessage", message);
-        localStorage.setItem("selectedTheme", theme);
-        localStorage.setItem("birthdayPhotos", JSON.stringify([]));
-        localStorage.removeItem("paymentStatus");
 
-        try {
+        function savePhotosAndRedirect(){
 
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = "Creating your shareable wish...";
+            const photos = [];
+            const files = Array.from(photoInput.files);
+
+            if(files.length === 0){
+
+                window.location.href = "wish.html";
+
+                return;
+
             }
 
-            const { createShareableWish } = await import("./wish-service.js");
-            const wishId = await createShareableWish({
-                recipientName: name,
-                senderName,
-                birthdayDate,
-                message,
-                theme,
-                files
+            files.forEach(file => {
+
+                const reader = new FileReader();
+
+                reader.onload = function(e){
+
+                    photos.push(e.target.result);
+
+                    if(photos.length === files.length){
+
+                        localStorage.setItem("birthdayPhotos", JSON.stringify(photos));
+
+                        window.location.href = "wish.html";
+
+                    }
+
+                };
+
+                reader.readAsDataURL(file);
+
             });
 
-            const wishUrl = new URL("wish.html", window.location.href);
-            wishUrl.searchParams.set("id", wishId);
-            window.location.assign(wishUrl.href);
+        }
 
-        } catch (error) {
+        const musicFile = musicInput && musicInput.files ? musicInput.files[0] : null;
 
-            console.error("Could not create a shareable wish:", error);
+        if(musicFile){
 
-            let errorMessage = "Wish create nahi ho payi. Firebase Firestore, Storage aur Anonymous Authentication enable karke phir try karein.";
+            const musicReader = new FileReader();
 
-            if (error?.name === "WishValidationError") {
-                errorMessage = error.message;
-            } else if (error?.code === "auth/operation-not-allowed") {
-                errorMessage = "Firebase Console mein Anonymous Authentication enable karein.";
-            } else if (error?.code === "auth/unauthorized-domain") {
-                errorMessage = "Is website domain ko Firebase Authentication ke Authorized domains mein add karein.";
-            } else if (error?.code === "permission-denied" || error?.code === "storage/unauthorized") {
-                errorMessage = "Firebase rules deploy nahi hui hain. README ke deployment steps complete karein.";
-            }
+            musicReader.onload = function(e){
 
-            alert(errorMessage);
+                try{
 
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalLabel;
-            }
+                    localStorage.setItem("birthdayMusic", e.target.result);
+
+                } catch(err){
+
+                    console.warn("Music file too large to save:", err);
+
+                }
+
+                savePhotosAndRedirect();
+
+            };
+
+            musicReader.readAsDataURL(musicFile);
+
+        } else {
+
+            localStorage.removeItem("birthdayMusic");
+
+            savePhotosAndRedirect();
 
         }
+
+       
+
+       // window.location.href = "wish.html";
 
     });
 
@@ -427,6 +452,43 @@ if (giftBtn && surpriseMessage) {
 
 }
  
+const birthdayMusicEl = document.getElementById("birthdayMusic");
+const musicToggleBtn = document.getElementById("musicToggleBtn");
+
+if(birthdayMusicEl && musicToggleBtn){
+
+    const savedMusic = localStorage.getItem("birthdayMusic");
+
+    if(savedMusic){
+
+        birthdayMusicEl.src = savedMusic;
+        musicToggleBtn.classList.add("show");
+
+        musicToggleBtn.addEventListener("click", () => {
+
+            if(birthdayMusicEl.paused){
+
+                birthdayMusicEl.play().catch(() => {});
+                musicToggleBtn.innerHTML = '<i class="ri-volume-up-line"></i>';
+                musicToggleBtn.classList.add("playing");
+
+            } else {
+
+                birthdayMusicEl.pause();
+                musicToggleBtn.innerHTML = '<i class="ri-volume-mute-line"></i>';
+                musicToggleBtn.classList.remove("playing");
+
+            }
+
+        });
+
+    } else {
+
+        musicToggleBtn.classList.remove("show");
+
+    }
+
+}
 const wishName = document.getElementById("wishName");
 const wishMessage = document.getElementById("wishMessage");
 
@@ -464,9 +526,7 @@ if (wishSlides) {
 const randomRotation =
     rotations[Math.floor(Math.random() * rotations.length)];
 
-if (window.innerWidth > 768) {
-    card.style.transform = `rotate(${randomRotation}deg)`;
-}
+card.style.transform = `rotate(${randomRotation}deg)`;
 
     const img = document.createElement("img");
 
@@ -512,124 +572,6 @@ if(wishPage){
     }
 
 }
-
-const sharedWishId = new URLSearchParams(window.location.search).get("id");
-
-function renderSharedWish(sharedWish) {
-
-    const recipientName = sharedWish.recipientName || "Friend";
-    const message = sharedWish.message || "Wishing you happiness, success and lots of beautiful memories.";
-    const photos = Array.isArray(sharedWish.photoUrls) ? sharedWish.photoUrls : [];
-
-    if (wishName) {
-        wishName.textContent = recipientName;
-    }
-
-    if (wishMessage) {
-        wishMessage.textContent = message;
-    }
-
-    if (wishPage) {
-        wishPage.classList.remove("pink-theme", "royal-theme", "kids-theme");
-
-        if (["pink", "royal", "kids"].includes(sharedWish.theme)) {
-            wishPage.classList.add(`${sharedWish.theme}-theme`);
-        }
-    }
-
-  if (wishSlides) {
-
-    wishSlides.replaceChildren();
-
-    photos.forEach(photo => {
-
-        const card = document.createElement("div");
-        card.classList.add("polaroid-card");
-
-        // Mobile par rotate mat karo
-        if (window.innerWidth > 768) {
-
-            const rotations = [-6, -4, -2, 2, 4, 6];
-
-            card.style.transform =
-                `rotate(${rotations[Math.floor(Math.random() * rotations.length)]}deg)`;
-
-        }
-
-        const img = document.createElement("img");
-        img.src = photo;
-        img.alt = `${recipientName}'s birthday memory`;
-
-        const caption = document.createElement("p");
-        caption.textContent = `❤️ Memories with ${recipientName}`;
-
-        card.appendChild(img);
-        card.appendChild(caption);
-
-        wishSlides.appendChild(card);
-
-    });
-
-}
-
-    const sharedDownloadName = document.getElementById("downloadName");
-    const sharedDownloadPhoto = document.getElementById("downloadPhoto");
-    const sharedDownloadMessage = document.getElementById("downloadMessage");
-
-    if (sharedDownloadName) {
-        sharedDownloadName.textContent = `🎂 Happy Birthday ${recipientName}`;
-    }
-
-    if (sharedDownloadMessage) {
-        sharedDownloadMessage.textContent = message;
-    }
-
-    if (sharedDownloadPhoto && photos.length > 0) {
-        sharedDownloadPhoto.src = photos[0];
-    }
-
-    document.title = `Happy Birthday ${recipientName} | WishCraft`;
-
-}
-
-function showSharedWishLoadError() {
-
-    if (wishName) {
-        wishName.textContent = "Wish unavailable";
-    }
-
-    if (wishMessage) {
-        wishMessage.textContent = "This wish could not be loaded. Please ask the sender for a new link.";
-    }
-
-}
-
-if (sharedWishId) {
-
-    if (wishMessage) {
-        wishMessage.textContent = "Loading your birthday surprise...";
-    }
-
-    import("./wish-service.js")
-        .then(({ getShareableWish }) => getShareableWish(sharedWishId))
-        .then(sharedWish => {
-
-            if (!sharedWish) {
-                throw new Error("Wish not found");
-            }
-
-            renderSharedWish(sharedWish);
-
-        })
-        .catch(error => {
-
-            console.error("Could not load the shared wish:", error);
-            showSharedWishLoadError();
-
-        });
-
-}
-
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const closeLightbox = document.getElementById("closeLightbox");
@@ -698,18 +640,10 @@ if (instagramBtn) {
 
 }
 /*==========================
-      Payment Lock
+      Payment Lock (DISABLED - all features free now)
 ==========================*/
 
 function checkPayment(){
-
-    if(localStorage.getItem("paymentStatus") !== "paid"){
-
-        alert("🔒 Please complete the payment to unlock downloads.");
-
-        return false;
-
-    }
 
     return true;
 
@@ -729,6 +663,8 @@ if(copyBtn){
 
     copyBtn.addEventListener("click", async ()=>{
 
+    if(!checkPayment()) return;
+
     await navigator.clipboard.writeText(shareLink);
 
     alert("✅ Link Copied Successfully!");
@@ -740,6 +676,8 @@ if(copyBtn){
 if(whatsappBtn){
 
     whatsappBtn.addEventListener("click", ()=>{ 
+          if(!checkPayment()) return;
+
 
         window.open(
 
@@ -758,6 +696,8 @@ if(whatsappBtn){
 if(facebookBtn){
 
     facebookBtn.addEventListener("click", ()=>{ 
+          if(!checkPayment()) return;
+
         window.open(
 
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`,
@@ -773,6 +713,8 @@ if(facebookBtn){
 if(telegramBtn){
 
     telegramBtn.addEventListener("click", ()=>{ 
+          if(!checkPayment()) return;
+
         window.open(
 
             `https://t.me/share/url?url=${encodeURIComponent(shareLink)}`,
@@ -793,6 +735,8 @@ const nativeShareBtn = document.getElementById("nativeShareBtn");
 if(nativeShareBtn){
 
     nativeShareBtn.addEventListener("click", async ()=>{ 
+          if(!checkPayment()) return;
+
         if(navigator.share){
 
             try{
@@ -1052,13 +996,7 @@ if(goToPayment){
 
     goToPayment.addEventListener("click",()=>{
 
-        const paymentUrl = new URL("payment.html", window.location.href);
-
-        if (sharedWishId) {
-            paymentUrl.searchParams.set("id", sharedWishId);
-        }
-
-        window.location.href = paymentUrl.href;
+        window.location.href="payment.html";
 
     });
 
