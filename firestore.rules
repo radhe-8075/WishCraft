@@ -1,0 +1,69 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /wishes/{wishId} {
+      allow get: if request.auth != null && resource.data.status == "published";
+      allow list: if false;
+      allow create: if request.auth != null
+        && request.resource.data.ownerUid == request.auth.uid
+        && isValidWish();
+      allow update, delete: if false;
+
+      function isValidWish() {
+        return request.resource.data.keys().hasAll([
+            "schemaVersion",
+            "status",
+            "ownerUid",
+            "recipientName",
+            "senderName",
+            "birthdayDate",
+            "message",
+            "theme",
+            "photoUrls",
+            "photoPaths",
+            "photoCount",
+            "createdAt",
+            "publishedAt"
+          ])
+          && request.resource.data.keys().hasOnly([
+            "schemaVersion",
+            "status",
+            "ownerUid",
+            "recipientName",
+            "senderName",
+            "birthdayDate",
+            "message",
+            "theme",
+            "photoUrls",
+            "photoPaths",
+            "photoCount",
+            "createdAt",
+            "publishedAt"
+          ])
+          && request.resource.data.schemaVersion == 1
+          && request.resource.data.status == "published"
+          && request.resource.data.ownerUid is string
+          && request.resource.data.recipientName is string
+          && request.resource.data.recipientName.size() > 0
+          && request.resource.data.recipientName.size() <= 100
+          && request.resource.data.senderName is string
+          && request.resource.data.senderName.size() <= 100
+          && request.resource.data.birthdayDate is string
+          && request.resource.data.birthdayDate.size() <= 10
+          && request.resource.data.message is string
+          && request.resource.data.message.size() > 0
+          && request.resource.data.message.size() <= 2000
+          && request.resource.data.theme in ["pink", "royal", "kids", "classic"]
+          && request.resource.data.photoUrls is list
+          && request.resource.data.photoPaths is list
+          && request.resource.data.photoUrls.size() <= 5
+          && request.resource.data.photoPaths.size() == request.resource.data.photoUrls.size()
+          && request.resource.data.photoCount is int
+          && request.resource.data.photoCount == request.resource.data.photoUrls.size()
+          && request.resource.data.createdAt is timestamp
+          && request.resource.data.publishedAt is timestamp;
+      }
+    }
+  }
+}

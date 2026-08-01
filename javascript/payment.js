@@ -1,5 +1,6 @@
 const paymentBtn = document.getElementById("paymentDoneBtn");
 const paymentCheck = document.getElementById("paymentCheck");
+const sharedWishId = new URLSearchParams(window.location.search).get("id");
 
 if (paymentBtn && paymentCheck) {
 
@@ -20,7 +21,13 @@ localStorage.setItem("paymentStatus","paid");
 
 setTimeout(() => {
 
-    window.location.href = "success.html";
+    const successUrl = new URL("success.html", window.location.href);
+
+    if (sharedWishId) {
+        successUrl.searchParams.set("id", sharedWishId);
+    }
+
+    window.location.href = successUrl.href;
 
 }, 1000);
 

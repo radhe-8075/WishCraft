@@ -16,6 +16,7 @@ window.addEventListener("load", () => {
 const successPlan = document.getElementById("successPlan");
 const successPrice = document.getElementById("successPrice");
 const paidAmount = document.getElementById("paidAmount");
+const sharedWishId = new URLSearchParams(window.location.search).get("id");
 
 const plan = localStorage.getItem("selectedPlan");
 const price = localStorage.getItem("selectedPrice");
@@ -40,7 +41,13 @@ if (continueBtn) {
 
     continueBtn.addEventListener("click", () => {
 
-        window.location.href = "wish.html";
+        const wishUrl = new URL("wish.html", window.location.href);
+
+        if (sharedWishId) {
+            wishUrl.searchParams.set("id", sharedWishId);
+        }
+
+        window.location.href = wishUrl.href;
 
     });
 
