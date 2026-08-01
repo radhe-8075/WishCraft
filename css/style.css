@@ -2095,11 +2095,13 @@ button{
 
     justify-content:center;
 
-    align-items:center;
+    align-items:flex-start;
 
     gap:40px;
 
     text-align:center;
+
+    padding-top:100px;
 
     padding:40px;
 
@@ -3231,7 +3233,11 @@ button{
 
         flex-direction:column;
 
+        align-items:center;
+
         gap:0;
+
+        padding-top:40px;
 
     }
 
