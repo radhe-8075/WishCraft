@@ -1305,6 +1305,39 @@ gap: 10px;
         height:200px;
     }
 
+    .create-section{
+        padding:20px 4% 60px;
+    }
+
+    .wish-form{
+        padding:20px;
+    }
+
+    .theme-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .theme-card img{
+        height:100px;
+    }
+
+    .theme-card h4{
+        font-size:14px;
+        padding:10px;
+    }
+
+}
+@media (max-width:360px){
+
+    .theme-grid{
+        grid-template-columns:1fr;
+    }
+
+    .theme-card img{
+        height:160px;
+    }
+
 }
 .nav-links a.active{
     color:#EC4899;
