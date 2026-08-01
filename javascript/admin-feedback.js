@@ -3,13 +3,18 @@ import {
     collection,
     getDocs,
     query,
-    orderBy
+    orderBy,
+    doc,
+    getDoc,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 /* ==========================
-   CHANGE THIS PASSWORD
+   Admin Password (stored in Firestore: config/admin -> password)
+   First time it runs, if no password exists in Firestore yet,
+   it will create one automatically with this default value.
 ========================== */
-const ADMIN_PASSWORD = "wishcraft2026";
+const DEFAULT_PASSWORD = "wishcraft2026";
 
 const loginGate = document.getElementById("loginGate");
 const adminLoginForm = document.getElementById("adminLoginForm");
@@ -19,22 +24,58 @@ const feedbackDashboard = document.getElementById("feedbackDashboard");
 const feedbackList = document.getElementById("feedbackList");
 const feedbackSummary = document.getElementById("feedbackSummary");
 
+async function getStoredPassword(){
+
+    try{
+
+        const passwordRef = doc(db, "config", "admin");
+        const passwordSnap = await getDoc(passwordRef);
+
+        if(passwordSnap.exists()){
+
+            return passwordSnap.data().password;
+
+        }
+
+    } catch(err){
+
+        console.warn("Could not read password from Firestore, using default.", err);
+
+    }
+
+    return DEFAULT_PASSWORD;
+
+}
+
 if(adminLoginForm){
 
-    adminLoginForm.addEventListener("submit", (e) => {
+    adminLoginForm.addEventListener("submit", async (e) => {
 
         e.preventDefault();
 
-        if(adminPassword.value === ADMIN_PASSWORD){
+        loginError.textContent = "";
 
-            sessionStorage.setItem("wishcraftAdmin", "true");
-            loginGate.style.display = "none";
-            feedbackDashboard.style.display = "block";
-            loadFeedback();
+        try{
 
-        } else {
+            const correctPassword = await getStoredPassword();
 
-            loginError.textContent = "❌ Wrong password.";
+            if(adminPassword.value === correctPassword){
+
+                sessionStorage.setItem("wishcraftAdmin", "true");
+                loginGate.style.display = "none";
+                feedbackDashboard.style.display = "block";
+                loadFeedback();
+
+            } else {
+
+                loginError.textContent = "❌ Wrong password.";
+
+            }
+
+        } catch(err){
+
+            console.error(err);
+            loginError.textContent = "❌ Something went wrong. Try again.";
 
         }
 
