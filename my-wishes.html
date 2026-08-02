@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Wishes | WishCraft</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="create-header">
+        <a href="index.html" class="back-btn">
+            <i class="ri-arrow-left-line"></i>
+            Back
+        </a>
+        <h1>My Wishes</h1>
+
+        <button id="logoutBtn" class="secondary-btn" style="margin-left:auto;">
+            <i class="ri-logout-box-line"></i>
+            Logout
+        </button>
+    </header>
+
+    <section class="create-section" id="notLoggedIn" style="display:none; text-align:center;">
+
+        <p style="margin-bottom:20px;">Aap login nahi hain.</p>
+        <a href="login.html" class="primary-btn" style="display:inline-block; text-decoration:none;">Login Karein</a>
+
+    </section>
+
+    <section class="create-section" id="wishesSection" style="display:none;">
+
+        <div class="feedback-summary" id="userSummary"></div>
+
+        <div id="myWishesList" class="feedback-list"></div>
+
+        <div class="template-btn" style="margin-top:30px;">
+            <a href="create.html" style="text-decoration:none;">
+                <button>
+                    ➕ Create New Wish
+                </button>
+            </a>
+        </div>
+
+    </section>
+
+    <script type="module" src="javascript/my-wishes.js"></script>
+
+</body>
+</html>

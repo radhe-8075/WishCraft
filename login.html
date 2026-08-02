@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | WishCraft</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="create-header">
+        <a href="index.html" class="back-btn">
+            <i class="ri-arrow-left-line"></i>
+            Back
+        </a>
+        <h1>Login to WishCraft</h1>
+    </header>
+
+    <section class="create-section">
+
+        <div class="wish-form login-card">
+
+            <div class="logo" style="justify-content:center; margin-bottom:20px;">
+                <i class="ri-gift-fill"></i>
+                <h2>WishCraft</h2>
+            </div>
+
+            <p style="text-align:center; color:#A1A1AA; margin-bottom:30px;">
+                Login karke apni saari banayi hui wishes ek jagah dekho.
+            </p>
+
+            <button id="googleLoginBtn" class="primary-btn google-login-btn">
+                <i class="ri-google-fill"></i>
+                Continue with Google
+            </button>
+
+            <p id="loginStatus" class="feedback-status"></p>
+
+        </div>
+
+    </section>
+
+    <script type="module">
+        import { signInWithGoogle } from "./javascript/auth.js";
+
+        const googleLoginBtn = document.getElementById("googleLoginBtn");
+        const loginStatus = document.getElementById("loginStatus");
+
+        googleLoginBtn.addEventListener("click", async () => {
+
+            googleLoginBtn.disabled = true;
+            loginStatus.textContent = "";
+
+            try{
+
+                await signInWithGoogle();
+                window.location.href = "my-wishes.html";
+
+            } catch(err){
+
+                console.error(err);
+                loginStatus.textContent = "❌ Login failed. Please try again.";
+                loginStatus.classList.add("error");
+                googleLoginBtn.disabled = false;
+
+            }
+
+        });
+    </script>
+
+</body>
+</html>

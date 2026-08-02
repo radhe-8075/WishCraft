@@ -877,26 +877,8 @@ if(downloadCardBtn){
 
 }
 /*==========================
-      Login Button
+      Login Button (handled by auth.js now)
 ===========================*/
-
-const loginBtn = document.getElementById("loginBtn");
-
-if(loginBtn){
-
-    loginBtn.addEventListener("click",()=>{
-
-        alert(
-`🚧 Login System
-
-This feature is coming soon.
-
-Firebase Authentication will be added in the next update of WishCraft.`
-        );
-
-    });
-
-}
 /*==========================
      Use Template
 ===========================*/
