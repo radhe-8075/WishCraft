@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>All Wishes | WishCraft Admin</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="create-header">
+        <a href="index.html" class="back-btn">
+            <i class="ri-arrow-left-line"></i>
+            Back
+        </a>
+        <h1>All Wishes (Admin)</h1>
+    </header>
+
+    <section class="create-section" id="notAdmin" style="display:none; text-align:center;">
+
+        <p style="margin-bottom:20px;" id="notAdminMessage">Aap login nahi hain.</p>
+        <a href="login.html" class="primary-btn" style="display:inline-block; text-decoration:none;">Login Karein</a>
+
+    </section>
+
+    <section class="create-section" id="wishesSection" style="display:none;">
+
+        <div class="feedback-summary" id="totalSummary"></div>
+
+        <input type="text" id="searchBox" placeholder="🔍 Naam ya date se search karein..." class="search-box">
+
+        <div id="allWishesList" class="feedback-list"></div>
+
+    </section>
+
+    <script type="module" src="javascript/admin-wishes.js"></script>
+
+</body>
+</html>
